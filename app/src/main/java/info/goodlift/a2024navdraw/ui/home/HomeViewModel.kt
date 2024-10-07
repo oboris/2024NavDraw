@@ -1,15 +1,20 @@
 package info.goodlift.a2024navdraw.ui.home
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import info.goodlift.a2024navdraw.App
 import info.goodlift.a2024navdraw.model.Author
 import info.goodlift.a2024navdraw.model.AuthorsList
 import info.goodlift.a2024navdraw.model.Book
 import info.goodlift.a2024navdraw.model.ItemTypeInterface
+import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(app : Application) : AndroidViewModel(app) {
 
+    val repo  = (app as App).appRepo
     private val _num = MutableLiveData<Int>().apply {
         value = 100
     }
@@ -27,6 +32,12 @@ class HomeViewModel : ViewModel() {
             Author("Name 1", "LastName1", "10.10.1990"),
             Author("Name 1", "LastName1", "10.10.1990"),
         )
+
+        viewModelScope.launch {
+            repo.addAllAuthors(authors)
+        }
+//        repo.addAllAuthors(authors)
+
         value = listOf(
             Book("Book 1", "Author 1", 100),
             Book("Book 2", "Author 1", 300),
@@ -42,6 +53,23 @@ class HomeViewModel : ViewModel() {
     }
 
     val books: LiveData<List<ItemTypeInterface>> = _books
+
+    init {
+        val authors = listOf(
+            Author("Name 1", "LastName1", "10.10.1990"),
+            Author("Name 1", "LastName1", "10.10.1990"),
+            Author("Name 1", "LastName1", "10.10.1990"),
+            Author("Name 1", "LastName1", "10.10.1990"),
+            Author("Name 1", "LastName1", "10.10.1990"),
+            Author("Name 1", "LastName1", "10.10.1990"),
+            Author("Name 1", "LastName1", "10.10.1990"),
+            Author("Name 1", "LastName1", "10.10.1990"),
+            Author("Name 1", "LastName1", "10.10.1990"),
+        )
+//        viewModelScope.launch {
+//            repo.addAllAuthors(authors)
+//        }
+    }
 
     fun changeValue(){
         _num.value = _num.value?.plus(10)
